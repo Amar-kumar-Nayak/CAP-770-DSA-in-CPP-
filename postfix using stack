@@ -1,0 +1,67 @@
+#include <iostream>
+#include <cstdlib> // For atoi function
+#include <stack>   // For stack data structure
+
+using namespace std;
+
+// Stack implementation using STL stack
+stack<int> st;
+
+// Function to push element onto the stack
+void push(int item) {
+    st.push(item);
+}
+
+// Function to pop element from the stack
+int pop() {
+    int item = st.top();
+    st.pop();
+    return item;
+}
+
+// Function to check if a character is an operator
+bool is_operator(char symbol) {
+    return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/');
+}
+
+// Function to evaluate the postfix expression
+int evaluate(char *expression) {
+    int i = 0;
+    char symbol = expression[i];
+    int operand1, operand2, result;
+
+    while (symbol != '\0') {
+        if (symbol >= '0' && symbol <= '9') {
+            // Convert character to integer and push onto the stack
+            int num = symbol - '0';
+            push(num);
+        } else if (is_operator(symbol)) {
+            // Pop two operands from the stack
+            operand2 = pop();
+            operand1 = pop();
+            
+            // Perform operation based on the operator
+            switch(symbol) {
+                case '+': result = operand1 + operand2; break;
+case '-': result = operand1 - operand2; break;
+                case '*': result = operand1 * operand2; break;
+                case '/': result = operand1 / operand2; break;
+            }
+            
+            // Push the result back onto the stack
+            push(result);
+        }
+        i++;
+        symbol = expression[i];
+    }
+    // The result will be at the top of the stack
+    result = pop();
+    return result;
+}
+
+int main() {
+    char expression[] = "5 6 7 + * 8 -";
+    int result = evaluate(expression);
+    cout << "Result = " << result << endl;
+    return 0;
+}
